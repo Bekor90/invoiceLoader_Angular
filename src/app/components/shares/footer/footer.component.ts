@@ -61,7 +61,7 @@ export class FooterComponent implements OnInit {
         }
         Swal.fire({
           title: 'Error when obtaining weather information',
-          text: ''+text,
+          text: text+', please check the location permission, it must be enabled',
           icon: 'error',
           showCancelButton: false,
           confirmButtonText: 'OK',
