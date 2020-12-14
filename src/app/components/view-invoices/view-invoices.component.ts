@@ -30,8 +30,6 @@ export class ViewInvoicesComponent implements OnInit {
 
   fnGetInvoice(filters?:any){
     this.serviceInvoice.getInvoice(filters).subscribe( response =>{
-      console.log('filtros: ',filters);
-      console.log('response: ',response);
       if(response.ok){
         response.data.map((data) => {
           try{
@@ -57,24 +55,34 @@ export class ViewInvoicesComponent implements OnInit {
   }
 
   fnFindInvoice(){
-    let dateFormatI = moment(this.dateI).format("YYYY-MM-DD");
-    let dateFormatF = moment(this.dateF).format("YYYY-MM-DD");
 
-    console.log(this.invoiceNumber);
-    console.log(dateFormatI);
-    console.log(dateFormatF);
+    if(moment(this.dateI).isSameOrBefore(this.dateF, 'day') &&
+      moment(this.dateI).isSameOrBefore(this.dateF, 'months') && 
+        moment(this.dateI).isSameOrBefore(this.dateF, 'year')){
 
-    this.arrayValues=[];
-    this.totalNet = 0;
-    this.totalTax = 0;
-    this.total = 0;
-    let filters={
-      invoiceNumber: this.invoiceNumber+'',
-      dateIni: dateFormatI,
-      dateFin: dateFormatF
-    }
+      let dateFormatI = moment(this.dateI).format("YYYY-MM-DD");
+      let dateFormatF = moment(this.dateF).format("YYYY-MM-DD");
 
-    this.fnGetInvoice(filters);
+      this.arrayValues=[];
+      this.totalNet = 0;
+      this.totalTax = 0;
+      this.total = 0;
+      let filters={
+        invoiceNumber: this.invoiceNumber+'',
+        dateIni: dateFormatI,
+        dateFin: dateFormatF
+      }
+      this.fnGetInvoice(filters);
+
+      }else{
+        Swal.fire({
+          title: 'Invalid filters',
+          text: 'Please validate your start date and end date',
+          icon: 'error',
+          showCancelButton: false,
+          confirmButtonText: 'OK',
+        });
+      }
   }
 
   fnDeleteData(){
